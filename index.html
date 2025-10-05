@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./publics/imgs/iu3.png" type="image/x-icon">
+  <title>Gửi em nè 💛</title>
+  <link rel="stylesheet" href="./publics/css/style.css" class="">
+</head>
+<body>
+  <div class="moon"></div>
+  <img src="publics/imgs/lan.png" alt="Chú Lân" class="chulan">
+  <img src="publics/imgs/chihang.png" alt="Chị Hằng" class="chihang">
+
+  <div class="message-container">
+    <div class="message" style="animation-delay:0s;">🌕 Tết Trung Thu đến rồi🌕<br>Mong em cũng thấy vui như anh 💛</div>
+    <div class="message" style="animation-delay:3s;">🏮 Trăng tròn thật đẹp<br> nhưng vẫn thua nụ cười của em 🌸</div>
+    <div class="message" style="animation-delay:6s;">🍰 Ước gì đêm nay ânh được cùng em ngắm trăng 🌙</div>
+    <div class="message" style="animation-delay:9s;">💌 Chúc em Trung Thu ấm áp và...<br> nghĩ đến anh một chút nha 😳 <br> Yêu em 💛</div>
+  </div>
+
+  <canvas id="fireworks"></canvas>
+
+  <script>
+    const wishes = [
+      "Yêu em",
+      "BabY cutephomaique",
+      "I Love You 💕"
+    ];
+
+    const wishImgs = [
+      "publics/imgs/iu3.png",
+      "publics/imgs/iu2.png",
+      "publics/imgs/iu1.png"
+    ];
+
+    function createLantern() {
+      const container = document.createElement("div");
+      container.classList.add("lantern-container");
+
+      const lantern = document.createElement("div");
+      lantern.classList.add("lantern");
+      lantern.textContent = "🏮";
+
+      const line = document.createElement("div");
+      line.classList.add("lantern-line");
+
+      const img = document.createElement("img");
+      img.src = wishImgs[Math.floor(Math.random() * wishImgs.length)];
+      img.classList.add("lantern-img");
+
+      const msg = document.createElement("p");
+      msg.classList.add("lantern-msg");
+      msg.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+
+      container.style.left = Math.random() * 100 + "vw";
+      container.style.animationDuration = (6 + Math.random() * 6) + "s";
+
+      container.appendChild(lantern);
+      container.appendChild(line);
+      container.appendChild(img);
+      container.appendChild(msg);
+      document.body.appendChild(container);
+
+      setTimeout(() => container.remove(), 15000);
+    }
+
+    setInterval(createLantern, 1400);
+
+    setTimeout(() => startFireworks(), 12000);
+
+    function startFireworks() {
+      const canvas = document.getElementById("fireworks");
+      const ctx = canvas.getContext("2d");
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const fireworks = [];
+
+      class Firework {
+        constructor(x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+          this.particles = [];
+          for (let i = 0; i < 60; i++) {
+            this.particles.push({
+              x: this.x,
+              y: this.y,
+              angle: Math.random() * 2 * Math.PI,
+              speed: Math.random() * 5 + 1,
+              alpha: 1,
+              decay: Math.random() * 0.02 + 0.01,
+              radius: Math.random() * 2 + 1
+            });
+          }
+        }
+        update() {
+          this.particles.forEach(p => {
+            p.x += Math.cos(p.angle) * p.speed;
+            p.y += Math.sin(p.angle) * p.speed + 0.3;
+            p.alpha -= p.decay;
+            p.speed *= 0.99;
+          });
+        }
+        draw() {
+          this.particles.forEach(p => {
+            ctx.fillStyle = `rgba(${this.color}, ${Math.max(p.alpha,0)})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = fireworks.length - 1; i >= 0; i--) {
+          const f = fireworks[i];
+          f.update();
+          f.draw();
+          if (f.particles.every(p => p.alpha <= 0)) {
+            fireworks.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(loop);
+      }
+
+      setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.55;
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        fireworks.push(new Firework(x, y, `${r},${g},${b}`));
+      }, 700);
+
+      loop();
+    }
+  </script>
+</body>
+</html>

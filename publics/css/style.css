@@ -1,0 +1,154 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: url("../imgs/bgr.png") no-repeat center/cover;
+    color: white;
+    position: relative;
+    will-change: transform;
+}
+
+.moon {
+    width: 280px;
+    height: 280px;
+    background: url("../imgs/moon.png") no-repeat center/contain;
+    position: absolute;
+    top: 0;
+    right: 80px;
+    animation: glow 3s infinite alternate;
+    z-index: 1;
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 10px #fff); }
+    to { filter: drop-shadow(0 0 25px gold); }
+}
+
+.chulan, .chihang {
+    position: absolute;
+    bottom: 50px;
+    width: auto;
+    height: 300px;
+    animation: floatY 3s ease-in-out infinite;
+    z-index: 2;
+    will-change: transform;
+}
+
+.chulan { left: 40px; animation-duration: 4s; }
+.chihang { right: 40px; }
+
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.lantern-container {
+    position: absolute;
+    bottom: -100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatLantern linear forwards;
+    will-change: transform, opacity;
+    z-index: 999999999999;
+}
+
+.lantern {
+    font-size: 36px;
+    animation: swing 2s ease-in-out infinite alternate;
+}
+
+@keyframes swing {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+}
+
+.lantern-line {
+    width: 2px;
+    height: 35px;
+    background: gold;
+    margin-top: -5px;
+}
+
+.lantern-img {
+    width: 70px;
+    height: 70px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 2px solid gold;
+    object-fit: cover;
+}
+
+.lantern-msg {
+    font-size: 15px;
+    color: #ffeb99;
+    margin-top: 6px;
+    text-align: center;
+    width: 110px;
+    line-height: 1.2;
+    text-shadow: 0 0 5px #ff0;
+}
+
+@keyframes floatLantern {
+    0% { transform: translate3d(0,0,0) scale(0.8); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translate3d(20px,-50vh,0) scale(1); opacity: 1; }
+    100% { transform: translate3d(-20px,-120vh,0) scale(1.1); opacity: 0; }
+}
+
+.message-container {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+}
+
+.message {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 8px #ff0, 0 0 15px orange;
+    opacity: 0;
+    animation: fadeMessage 12s ease-in-out forwards;
+}
+
+@keyframes fadeMessage {
+    0%,100% { opacity: 0; transform: scale(0.95); }
+    10%,25% { opacity: 1; transform: scale(1.05); }
+    30% { opacity: 0; }
+}
+
+#fireworks {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@media(max-width: 768px) {
+    body {
+        background: url("../imgs/bgr_mob.png") no-repeat center/cover !important;
+    }
+
+    .chulan, .chihang {
+        height: 200px;
+    }
+
+    .chulan { left: 20px; animation-duration: 4s; }
+
+    .chihang {
+        bottom:600px;
+    }
+
+    
+    .message-container {
+        top: 35%;
+    }
+}
